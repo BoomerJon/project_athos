@@ -35,31 +35,46 @@ const Hero = () => {
       console.log('Test query response:', { testData, testError }); // Debug log
 
       // Then try the insert
-      const { error, data } = await supabase
+      const { error: supabaseError } = await supabase
         .from('waitlist')
-        .insert([{ email }])
-        .select();
+        .insert([{ email }]);
 
-      console.log('Insert response:', { error, data }); // Debug log
+      console.log('Insert response:', { supabaseError }); // Debug log
 
-      if (error) {
+      if (supabaseError) {
         console.error('Supabase error details:', {
-          code: error.code,
-          message: error.message,
-          details: error.details,
-          hint: error.hint
+          code: supabaseError.code,
+          message: supabaseError.message,
+          details: supabaseError.details,
+          hint: supabaseError.hint
         });
 
-        if (error.code === '23505') {
+        if (supabaseError.code === '23505') {
           setErrorMessage('This email is already on the waitlist.');
         } else {
-          setErrorMessage(`Database Error: ${error.message}`);
+          setErrorMessage(`Database Error: ${supabaseError.message}`);
         }
         setStatus('error');
-      } else {
-        setStatus('success');
-        setEmail('');
+        return;
       }
+
+      // If Supabase insert successful, send welcome email
+      const emailResponse = await fetch('/api/send-welcome-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!emailResponse.ok) {
+        console.error('Failed to send welcome email');
+        // Still show success since they're on the waitlist
+      }
+
+      setStatus('success');
+      setEmail('');
+
     } catch (error) {
       console.error('Caught error:', error);
       setStatus('error');

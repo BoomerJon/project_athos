@@ -29,16 +29,29 @@ export default async function handler(request: Request) {
       body: JSON.stringify({
         sender: {
           name: 'Glow Oil',
-          email: 'welcome@yourdomain.com'
+          email: 'joncharlesgore@gmail.com'
         },
         to: [{
           email: email
         }],
         subject: 'Welcome to Glow Oil Waitlist!',
         htmlContent: `
-          <h1>Welcome to Glow Oil!</h1>
-          <p>Thank you for joining our waitlist. We're excited to have you on board!</p>
-          <p>We'll keep you updated on our launch and any exciting news.</p>
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h1 style="color: #333;">Welcome to Glow Oil!</h1>
+            <p>Thank you for joining our waitlist. We're thrilled to have you on board!</p>
+            <p>We'll keep you updated on our launch and share exclusive early-access offers.</p>
+            <div style="margin: 20px 0;">
+              <h2 style="color: #666;">What's Next?</h2>
+              <ul>
+                <li>Follow us on social media for updates</li>
+                <li>Share with friends who might be interested</li>
+                <li>Stay tuned for our launch announcement</li>
+              </ul>
+            </div>
+            <p style="color: #888; font-size: 12px;">
+              If you didn't sign up for this waitlist, please ignore this email.
+            </p>
+          </div>
         `
       })
     });
