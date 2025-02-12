@@ -1,4 +1,5 @@
 import { Leaf, Star, Heart } from "lucide-react";
+import { motion } from "framer-motion"; 
 
 const Benefits = () => {
   const benefits = [
@@ -22,25 +23,30 @@ const Benefits = () => {
   return (
     <section id="benefits" className="py-16 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-accent text-center mb-12">
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-3xl md:text-4xl font-bold text-accent text-center mb-12"
+        >
           Why Choose Our Facial Oil?
-        </h2>
+        </motion.h2>
         <div className="grid md:grid-cols-3 gap-8">
           {benefits.map((benefit, index) => (
-            <div
+            <motion.div
               key={benefit.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+              whileHover={{ scale: 1.05 }}
               className="p-6 rounded-lg bg-secondary/20 hover:bg-secondary/30 transition-colors"
-              style={{
-                animation: `fadeIn 0.5s ease-out forwards ${index * 0.2}s`,
-                opacity: 0,
-              }}
             >
               <div className="text-primary mb-4">{benefit.icon}</div>
               <h3 className="text-xl font-semibold text-accent mb-2">
                 {benefit.title}
               </h3>
               <p className="text-muted-foreground">{benefit.description}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
