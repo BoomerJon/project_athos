@@ -24,7 +24,7 @@ dist-ssr
 *.sw?
 
 
-# Environment variables
+# Environment files
 .env
 .env.local
 .env.development
