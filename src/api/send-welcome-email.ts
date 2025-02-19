@@ -4,11 +4,7 @@ export const config = {
   runtime: 'edge',
 };
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL!;
-const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY!;
 const brevoApiKey = process.env.VITE_BREVO_API_KEY!;
-
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default async function handler(request: Request) {
   if (request.method !== 'POST') {
@@ -28,35 +24,36 @@ export default async function handler(request: Request) {
       },
       body: JSON.stringify({
         sender: {
-          name: 'Glow Oil',
-          email: 'joncharlesgore@gmail.com'
+          name: 'Doc Bankman',
+          email: 'thepharmacist@docbankman.com'
         },
         to: [{
           email: email
         }],
-        subject: 'Welcome to Glow Oil Waitlist!',
+        subject: 'Welcome to Doc Bankman!',
         htmlContent: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h1 style="color: #333;">Welcome to Glow Oil!</h1>
-            <p>Thank you for joining our waitlist. We're thrilled to have you on board!</p>
-            <p>We'll keep you updated on our launch and share exclusive early-access offers.</p>
-            <div style="margin: 20px 0;">
-              <h2 style="color: #666;">What's Next?</h2>
-              <ul>
-                <li>Follow us on social media for updates</li>
-                <li>Share with friends who might be interested</li>
-                <li>Stay tuned for our launch announcement</li>
-              </ul>
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h1 style="color: #333; text-align: center;">Welcome to Glow Oil!</h1>
+            <p>Thank you for joining our waitlist! We're excited to have you as part of our community.</p>
+            <p>Here's what you can expect:</p>
+            <ul style="color: #555;">
+              <li>Early access to our launch</li>
+              <li>Exclusive discounts</li>
+              <li>Skincare tips and updates</li>
+            </ul>
+            <div style="text-align: center; margin-top: 30px;">
+              <p style="color: #888;">Follow us on social media for daily updates:</p>
+              <a href="#" style="color: #007bff; text-decoration: none; margin: 0 10px;">Instagram</a>
+              <a href="#" style="color: #007bff; text-decoration: none; margin: 0 10px;">Twitter</a>
             </div>
-            <p style="color: #888; font-size: 12px;">
-              If you didn't sign up for this waitlist, please ignore this email.
-            </p>
           </div>
         `
       })
     });
 
     if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Brevo API error:', errorData);
       throw new Error('Failed to send email');
     }
 

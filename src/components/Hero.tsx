@@ -24,31 +24,12 @@ const Hero = () => {
       setStatus(null);
       setErrorMessage("");
 
-      console.log('Attempting to insert email:', email); // Debug log
-
-      // First, let's test the connection
-      const { data: testData, error: testError } = await supabase
-        .from('waitlist')
-        .select('*')
-        .limit(1);
-      
-      console.log('Test query response:', { testData, testError }); // Debug log
-
-      // Then try the insert
+      // First add to Supabase waitlist
       const { error: supabaseError } = await supabase
         .from('waitlist')
         .insert([{ email }]);
 
-      console.log('Insert response:', { supabaseError }); // Debug log
-
       if (supabaseError) {
-        console.error('Supabase error details:', {
-          code: supabaseError.code,
-          message: supabaseError.message,
-          details: supabaseError.details,
-          hint: supabaseError.hint
-        });
-
         if (supabaseError.code === '23505') {
           setErrorMessage('This email is already on the waitlist.');
         } else {
