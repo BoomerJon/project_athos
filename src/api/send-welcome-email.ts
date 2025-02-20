@@ -13,6 +13,7 @@ export default async function handler(request: Request) {
 
   try {
     const { email } = await request.json();
+    console.log('Attempting to add contact to Brevo:', email);
 
     // Add contact to Brevo waitlist
     const createContactResponse = await fetch('https://api.brevo.com/v3/contacts', {
@@ -33,13 +34,15 @@ export default async function handler(request: Request) {
       })
     });
 
+    const responseData = await createContactResponse.json();
+    console.log('Brevo API Response:', responseData);
+
     if (!createContactResponse.ok) {
-      const errorData = await createContactResponse.json();
-      console.error('Failed to add contact to Brevo:', errorData);
-      throw new Error('Failed to add to waitlist');
+      console.error('Failed to add contact to Brevo:', responseData);
+      throw new Error(`Failed to add to waitlist: ${JSON.stringify(responseData)}`);
     }
 
-    return new Response(JSON.stringify({ success: true }), {
+    return new Response(JSON.stringify({ success: true, data: responseData }), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
@@ -47,9 +50,12 @@ export default async function handler(request: Request) {
     });
 
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Detailed error:', error);
     return new Response(
-      JSON.stringify({ error: 'Failed to add to waitlist' }), 
+      JSON.stringify({ 
+        error: 'Failed to add to waitlist',
+        details: error.message 
+      }), 
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }

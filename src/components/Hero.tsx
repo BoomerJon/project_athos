@@ -39,8 +39,8 @@ const Hero = () => {
         return;
       }
 
-      // If Supabase insert successful, send welcome email
-      const emailResponse = await fetch('/api/send-welcome-email', {
+      // If Supabase insert successful, send to Brevo
+      const emailResponse = await fetch('https://www.docbankman.com/api/send-welcome-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,9 +48,11 @@ const Hero = () => {
         body: JSON.stringify({ email }),
       });
 
+      const responseData = await emailResponse.json();
+      console.log('Brevo response:', responseData);
+
       if (!emailResponse.ok) {
-        console.error('Failed to send welcome email');
-        // Still show success since they're on the waitlist
+        console.error('Failed to add to Brevo:', responseData);
       }
 
       setStatus('success');
