@@ -40,7 +40,7 @@ const Hero = () => {
       }
 
       // If Supabase insert successful, send to Brevo
-      const emailResponse = await fetch('https://www.docbankman.com/api/send-welcome-email', {
+      const emailResponse = await fetch('/api/send-welcome-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -53,6 +53,7 @@ const Hero = () => {
 
       if (!emailResponse.ok) {
         console.error('Failed to add to Brevo:', responseData);
+        throw new Error('Failed to add to Brevo list');
       }
 
       setStatus('success');
